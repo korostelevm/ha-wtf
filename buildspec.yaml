@@ -28,7 +28,7 @@ version: 0.2
   # build-graph:
         
 phases:
-  install:
+  # install:
     # run-as: Linux-user-name
     # runtime-versions:
     #   runtime: version
@@ -49,6 +49,7 @@ phases:
   build:
     # run-as: Linux-user-name
     commands:
+      - ls -lah
       - echo hello
       - env | sort
       - whoami

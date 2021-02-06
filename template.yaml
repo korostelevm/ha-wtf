@@ -12,7 +12,7 @@ Parameters:
     Default: '{{resolve:ssm:/account/ssl-cert:1}}'
   GitToken: 
     Type: String
-    Default: '{{resolve:ssm:/git/token:1}}'
+    Default: '{{resolve:secretsmanager:GithubToken:SecretString:token}}'
   Namespace:
     Type: String
     Default: ''
@@ -28,6 +28,7 @@ Resources:
       ServerType: GITHUB
       Token: !Ref GitToken
   CodeBuildProject:
+    DependsOn: GitAuth
     Type: AWS::CodeBuild::Project
     Properties:
       Name: ha-wtf
@@ -42,6 +43,7 @@ Resources:
         Type: GITHUB
         Location: https://github.com/korostelevm/ha-wtf
         Auth: !Ref GitAuth
+      
     # Triggers:
     #   Webhook: true
     #   FilterGroups:

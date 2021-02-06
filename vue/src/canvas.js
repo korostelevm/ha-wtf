@@ -10,7 +10,7 @@ const run =  ()=> {
             baseTime: 100,
             addedTime: 195,
             dieChance: .005,
-            spawnChance: 1,
+            spawnChance: 0.1,
             sparkChance: 0.1,
             sparkDist: 10,
             sparkSize: 2,
@@ -24,8 +24,8 @@ const run =  ()=> {
 
             cx: w / 2,
             cy: h / 2,
-            repaintAlpha: .01,
-            hueChange: 0.1
+            repaintAlpha: 0,
+            hueChange: 0.05
         },
 
         tick = 0,
@@ -92,8 +92,8 @@ const run =  ()=> {
 
         this.x += this.addedX;
         this.y += this.addedY;
-        // this.len = opts.len;
-        this.len =8;
+        this.len = opts.len;
+        // this.len =8;
         this.time = 0;
         this.targetTime = 8
         // this.targetTime = (opts.baseTime + opts.addedTime * Math.random()) | 0;
@@ -138,7 +138,7 @@ const run =  ()=> {
             opts.cy + (this.y + y) * this.len,
             size, size
          );
-        if (Math.random() < Math.cos(prop) )
+        if (Math.random() < opts.sparkChance){
 
             ctx.fillRect(
                  opts.cx  - this.addedX + (this.x + x) * this.len + Math.random() * opts.sparkDist * (Math.random() < .5 ? 1 : -1) - opts.sparkSize / 2,
@@ -146,6 +146,7 @@ const run =  ()=> {
                 opts.sparkSize ,
                 opts.sparkSize
                 )
+            }
         }
     loop();
 

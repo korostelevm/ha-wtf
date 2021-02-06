@@ -14,6 +14,11 @@ config:
 install: 
 	@npm run install:all
 
+.PHONY: frontend
+frontend: 
+	@cd vue && npm run build
+	@aws s3 cp ./vue/dist s3://ha.wtf --recursive  
+
 .PHONY: build
 build: 
 	@sam build

@@ -34,6 +34,7 @@ phases:
     #   runtime: version
     commands:
       - make install
+      - make frontend
     #   - command
     #   - command
     # finally:

@@ -1,0 +1,23 @@
+{
+  "name": "serverless-express-microfrontend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "service.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "aws-serverless-express": "^3.3.3",
+    "aws-xray-sdk": "^2.5.0",
+    "axios": "^0.19.2",
+    "body-parser": "^1.17.1",
+    "compression": "^1.6.2",
+    "cors": "^2.8.3",
+    "dynamoose": "^2.2.1",
+    "express": "^4.15.2",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.27.0",
+    "sha1": "^1.1.1",
+    "slugify": "^1.4.4",
+    "tracer": "^1.1.2"
+  }
+}

@@ -28,12 +28,13 @@ version: 0.2
   # build-graph:
         
 phases:
-  # install:
+  install:
     # run-as: Linux-user-name
     # runtime-versions:
     #   runtime: version
     #   runtime: version
-    # commands:
+    commands:
+      - make install
     #   - command
     #   - command
     # finally:

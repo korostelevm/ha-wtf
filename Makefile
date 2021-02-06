@@ -10,6 +10,10 @@ config:
 	@echo ${version}
 	@echo ${app_name}
 
+.PHONY: install
+install: 
+	@sam npm run install:all
+
 .PHONY: build
 build: 
 	@sam build

@@ -14,8 +14,7 @@
     "build:microfrontend": "cd vue && npm run build",
     "start": "export env=$npm_config_env && concurrently \"npm run start:shell\"  \"npm run start:microfrontend\"  \"nodemon app.local.js\"",
     "start:shell": "sleep 3  && open http://localhost:1111/",
-    "start:microfrontend": "cd vue && node ./node_modules/@vue/cli-service/bin/vue-cli-service.js serve --port 1111",
-    "deploy": "bash deploy.sh $npm_config_bucket"
+    "start:microfrontend": "cd vue && node ./node_modules/@vue/cli-service/bin/vue-cli-service.js serve --port 1111"
   },
   "license": "Apache-2.0",
   "dependencies": {

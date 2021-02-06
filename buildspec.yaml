@@ -54,6 +54,7 @@ phases:
       - env | sort
       - whoami
       - aws secretsmanager get-secret-value --secret-id GithubToken | jq -r '.SecretString|fromjson|.token'
+      - sam --version
       - make deploy
     finally:
       - echo bye

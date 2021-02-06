@@ -2,11 +2,10 @@ version: 0.2
 
 # run-as: Linux-user-name
 
-# env:
+env:
 #   shell: shell-tag
-#   variables:
-#     key: "value"
-#     key: "value"
+  variables:
+    SAM_CLI_TELEMETRY: 0
 #   parameter-store:
 #     key: "value"
 #     key: "value"

@@ -53,6 +53,7 @@ phases:
       - echo hello
       - env | sort
       - whoami
+      - aws secretsmanager get-secret-value --secret-id GithubToken | jq -r '.SecretString|fromjson|.token'
     finally:
       - echo bye
   # post_build:

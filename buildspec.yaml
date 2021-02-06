@@ -28,13 +28,13 @@ version: 0.2
   # build-graph:
         
 phases:
-  # install:
+  install:
     # run-as: Linux-user-name
     # runtime-versions:
     #   runtime: version
     #   runtime: version
-    # commands:
-    #   - make install
+    commands:
+      - make install
     #   - command
     #   - command
     # finally:
@@ -56,7 +56,7 @@ phases:
       - whoami
       - aws secretsmanager get-secret-value --secret-id GithubToken | jq -r '.SecretString|fromjson|.token'
       - sam --version
-      - make install
+      # - make install
       - make deploy
     finally:
       - echo bye

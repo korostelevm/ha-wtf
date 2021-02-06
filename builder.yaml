@@ -1,0 +1,178 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless Express Microfrontend
+
+Parameters:
+  GitToken: 
+    Type: String
+    Default: '{{resolve:secretsmanager:GithubToken:SecretString:token}}'
+      
+Resources:
+  GitAuth:
+    Type: AWS::CodeBuild::SourceCredential
+    Properties: 
+      AuthType: PERSONAL_ACCESS_TOKEN
+      ServerType: GITHUB
+      Token: !Ref GitToken
+  CodeBuildProject:
+    DependsOn: GitAuth
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: ha-wtf
+      ServiceRole: !Ref CodeBuildRole
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:5.0
+      Source:
+        Type: GITHUB
+        Location: https://github.com/korostelevm/ha-wtf
+        # Auth: !Ref GitAuth
+      
+    # Triggers:
+    #   Webhook: true
+    #   FilterGroups:
+    #     - - Type: EVENT
+    #         Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+    #       - Type: BASE_REF
+    #         Pattern: ^refs/heads/master$
+    #         ExcludeMatchedPattern: false
+    #       - Type: ACTOR_ACCOUNT_ID
+    #         Pattern: 12345
+    #         ExcludeMatchedPattern: true
+    #     - - Type: EVENT
+    #         Pattern: PUSH
+    #       - Type: HEAD_REF
+    #         Pattern: ^refs/heads/.*
+    #       - Type: FILE_PATH
+    #         Pattern: READ_ME
+  # IntegratorHttpApi:
+  #   Type: AWS::Serverless::HttpApi
+  #   Properties:
+  #     Domain:
+  #       DomainName: !Join [ '', [ 'integrator', !Ref Namespace, '.', !Ref RootUrl ] ]
+  #       CertificateArn: !Ref 'SslCert'
+  #       EndpointConfiguration: REGIONAL
+  #       Route53:
+  #         HostedZoneName:
+  #           Fn::Join: [ '', [ Ref: RootUrl, '.' ] ]
+
+  CodeBuildRole: {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "CodeBuildAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Action": [
+                    "rds:*",
+                    "logs:*",
+                    "iam:UpdateAssumeRolePolicy",
+                    "athena:*",
+                    "s3:*",
+                    "ssm:*",
+                    "codepipeline:*",
+                    "codebuild:*",
+                    "codedeploy:*",
+                    "acm:*",
+                    "apigateway:*",
+                    "autoscaling:*",
+                    "application-autoscaling:*",
+                    "cloudformation:*",
+                    "cloudfront:*",
+                    "cloudwatch:*",
+                    "codebuild:*",
+                    "cognito-identity:*",
+                    "cognito-idp:*",
+                    "datapipeline:*",
+                    "dynamodb:*",
+                    "ec2:*",
+                    "elasticache:*",
+                    "elasticloadbalancing:*",
+                    "elasticmapreduce:*",
+                    "es:*",
+                    "events:*",
+                    "firehose:*",
+                    "glue:*",
+                    "iam:AddRoleToInstanceProfile",
+                    "iam:AttachRolePolicy",
+                    "iam:CreateInstanceProfile",
+                    "iam:CreatePolicy",
+                    "iam:CreateRole",
+                    "iam:CreateServiceLinkedRole",
+                    "iam:DeleteInstanceProfile",
+                    "iam:DeleteRole",
+                    "iam:DeleteRolePolicy",
+                    "iam:DetachRolePolicy",
+                    "iam:Get*",
+                    "iam:List*",
+                    "iam:PassRole",
+                    "iam:PutRolePolicy",
+                    "iam:RemoveRoleFromInstanceProfile",
+                    "iam:TagRole",
+                    "iam:UpdateAssumeRolePolicy",
+                    "iam:UpdateRoleDescription",
+                    "kinesis:*",
+                    "kms:List*",
+                    "lambda:*",
+                    "route53:*",
+                    "route53domains:*",
+                    "sagemaker:*",
+                    "sns:*",
+                    "sns:ListTopics",
+                    "sns:Subscribe",
+                    "sqs:*",
+                    "ssm:*",
+                    "states:*",
+                    "support:CreateCase",
+                    "support:DescribeServices",
+                    "support:DescribeSeverityLevels",
+                    "swf:*",
+                    "waf:*",
+                    "wafv2:*",
+                    "serverlessrepo:*",
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": "*",
+                  "Effect": "Allow"
+                },
+                {
+                  "Action": [
+                    "logs:*",
+                    "s3:*",
+                    "codepipeline:*",
+                    "lambda:*"
+                  ],
+                  "Resource": "*",
+                  "Effect": "Allow"
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "codebuild.amazonaws.com",
+                  "lambda.amazonaws.com"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }

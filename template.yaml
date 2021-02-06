@@ -6,10 +6,10 @@ Description: Serverless Express Microfrontend
 Parameters:
   RootUrl:
     Type: String
-    Default: '{{resolve:ssm:/account/root-url:1}}'
+    Default: 'ha.wtf'
   SslCert: 
     Type: String
-    Default: '{{resolve:ssm:/account/ssl-cert:1}}'
+    Default: '{{resolve:ssm:/ha-wtf/ssl-cert:1}}'
   GitToken: 
     Type: String
     Default: '{{resolve:secretsmanager:GithubToken:SecretString:token}}'
@@ -18,7 +18,7 @@ Parameters:
     Default: ''
   ServiceSubDomainName: 
       Type: String
-      Default: 'wtf'
+      Default: 'www'
       
 Resources:
   Builder:
@@ -80,7 +80,7 @@ Resources:
   StaticS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Join ['', [!Ref 'ServiceSubDomainName','.', !Ref RootUrl]]
+      BucketName: !Ref RootUrl
       CorsConfiguration:
         CorsRules:
           - AllowedHeaders: ['*']
@@ -122,7 +122,8 @@ Resources:
       DistributionConfig:
         PriceClass: PriceClass_100
         Aliases: 
-          - !Join [ '', [ !Ref ServiceSubDomainName, !Ref Namespace, '.', !Ref RootUrl ] ]
+          - !Join [ '', [ !Ref RootUrl ] ]
+          # - !Join [ '', [ !Ref ServiceSubDomainName, !Ref Namespace, '.', !Ref RootUrl ] ]
         DefaultCacheBehavior:
           AllowedMethods:
             - HEAD
@@ -204,7 +205,7 @@ Resources:
       Properties:
         HostedZoneName: !Join [ '', [ !Ref RootUrl, '.' ] ]
         RecordSets:
-          - Name: !Join [ '', [ !Ref ServiceSubDomainName, !Ref Namespace, '.', !Ref RootUrl ] ]
+          - Name: !Join [ '', [ !Ref RootUrl ] ]
             Type: A
             AliasTarget:
               DNSName: !GetAtt 'WtfCloudFront.DomainName'

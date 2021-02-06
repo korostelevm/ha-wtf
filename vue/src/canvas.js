@@ -6,13 +6,13 @@ const run =  ()=> {
         opts = {
 
             len:20,
-            count: 10,
+            count: 20,
             baseTime: 100,
             addedTime: 195,
             dieChance: .005,
             spawnChance: 1,
             sparkChance: 0.1,
-            sparkDist: 100,
+            sparkDist: 10,
             sparkSize: 2,
 
             color: 'hsl(hue,100%,light%)',
@@ -126,9 +126,11 @@ const run =  ()=> {
             // wave = Math.sin(prop * Math.PI / 2),
             x = this.addedX * wave,
             y = this.addedY * wave;
-        
-        var size = 1
-
+            // var size = 
+            // console.log(this.cumulativeTime)
+            var size = this.cumulativeTime / 100
+            opts.sparkSize = size
+            // var size = Math.sin(prop/100 * Math.PI / 2) * 10
         ctx.shadowBlur = prop * opts.shadowToTimePropMult;
         ctx.fillStyle = ctx.shadowColor = this.color.replace('light', opts.baseLight + opts.addedLight * Math.sin(this.cumulativeTime * this.lightInputMultiplier));
         ctx.fillRect(

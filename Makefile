@@ -12,7 +12,7 @@ config:
 
 .PHONY: install
 install: 
-	@sam npm run install:all
+	@npm run install:all
 
 .PHONY: build
 build: 

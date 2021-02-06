@@ -30,35 +30,23 @@ Resources:
       Source:
         Type: GITHUB
         Location: https://github.com/korostelevm/ha-wtf
-        # Auth: !Ref GitAuth
-      
-    # Triggers:
-    #   Webhook: true
-    #   FilterGroups:
-    #     - - Type: EVENT
-    #         Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
-    #       - Type: BASE_REF
-    #         Pattern: ^refs/heads/master$
-    #         ExcludeMatchedPattern: false
-    #       - Type: ACTOR_ACCOUNT_ID
-    #         Pattern: 12345
-    #         ExcludeMatchedPattern: true
-    #     - - Type: EVENT
-    #         Pattern: PUSH
-    #       - Type: HEAD_REF
-    #         Pattern: ^refs/heads/.*
-    #       - Type: FILE_PATH
-    #         Pattern: READ_ME
-  # IntegratorHttpApi:
-  #   Type: AWS::Serverless::HttpApi
-  #   Properties:
-  #     Domain:
-  #       DomainName: !Join [ '', [ 'integrator', !Ref Namespace, '.', !Ref RootUrl ] ]
-  #       CertificateArn: !Ref 'SslCert'
-  #       EndpointConfiguration: REGIONAL
-  #       Route53:
-  #         HostedZoneName:
-  #           Fn::Join: [ '', [ Ref: RootUrl, '.' ] ]
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+            - Type: BASE_REF
+              Pattern: ^refs/heads/master$
+              ExcludeMatchedPattern: false
+            # - Type: ACTOR_ACCOUNT_ID
+            #   Pattern: 12345
+            #   ExcludeMatchedPattern: true
+          - - Type: EVENT
+              Pattern: PUSH
+            - Type: HEAD_REF
+              Pattern: ^refs/heads/.*
+            - Type: FILE_PATH
+              Pattern: READ_ME
 
   CodeBuildRole: {
       "Type": "AWS::IAM::Role",

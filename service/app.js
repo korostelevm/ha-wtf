@@ -31,13 +31,6 @@ router.use(bodyParser.urlencoded({ extended: true }))
 router.use(awsServerlessExpressMiddleware.eventContext())
 
 
-
-
-router.get('/', (req, res) => {
-  res.setHeader("Content-Type","text/html");
-  res.sendFile(`${__dirname}/public/index.html`)
-})
-
 router.get('/stuff', async (req, res) => {
   var results = {}
   res.json(results)

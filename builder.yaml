@@ -43,8 +43,8 @@ Resources:
             #   ExcludeMatchedPattern: true
           - - Type: EVENT
               Pattern: PUSH
-            # - Type: HEAD_REF
-              # Pattern: ^refs/heads/.*
+            - Type: HEAD_REF
+              Pattern: ^refs/heads/master
             # - Type: FILE_PATH
             #   Pattern: READ_ME
 

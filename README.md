@@ -13,5 +13,5 @@ make local
 
 ### Deploy
 ```
-make deploy
+make deploy 
 ``` 

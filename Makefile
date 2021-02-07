@@ -14,6 +14,10 @@ config:
 install: 
 	@npm run install:all
 
+.PHONY: local
+local: 
+	@npm run start
+
 .PHONY: frontend
 frontend: 
 	@cd vue && npm run build
@@ -21,6 +25,7 @@ frontend:
 
 .PHONY: build
 build: 
+	@cd vue && npm run build
 	@sam build
 
 .PHONY: test
@@ -29,13 +34,10 @@ test:
 
 .PHONY: package
 package: build
-	@sam package --s3-bucket $$BUCKET
+	@sam package --template-file template.yaml --s3-bucket ${BUCKET} --s3-prefix ${app_name}/${date}/${version} --output-template-file template-built.yaml
 
 .PHONY: deploy
 deploy: package
-	@sam package --template-file template.yaml --s3-bucket ${BUCKET} --s3-prefix ${app_name}/${date}/${version} --output-template-file template-built.yaml
 	@sam deploy --template-file template-built.yaml --stack-name ${app_name} --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --no-fail-on-empty-changeset --parameter-overrides RootUrl=ha.wtf
-
 	@rm template-built.yaml
-	@cd vue && npm run build
 	@aws s3 cp ./vue/dist s3://ha.wtf --recursive  

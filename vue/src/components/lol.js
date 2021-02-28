@@ -58,7 +58,7 @@ const sketch = (p) => {
 
     function Pulser(){
         this.r = 10
-        this.nodes = 1000;
+        this.nodes = 100;
         this.ns = []
         this.update = function(x,y) {
             var targetX = s.update(x,y).x

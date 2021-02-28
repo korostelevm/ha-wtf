@@ -15,7 +15,20 @@ export default {
       }
     },
     mounted: function() {
-      lol.run()
+       if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            // window.addEventListener('devicemotion', () => {});
+            lol.run()
+          }
+        })
+        .catch(console.error);
+    } else {
+      // handle regular non iOS 13+ devices
+    }
+
+      
     },
     created: function() {
     },

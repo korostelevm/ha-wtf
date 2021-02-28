@@ -67,7 +67,7 @@ const sketch = (p) => {
  
             var center = {x:p.windowWidth/2,y:p.windowHeight/2}
             let a = p.atan2(targetY - center.y, targetX - center.x);
-            var rotAngle = 0
+            var rotAngle = 0 
             var radius =200
             for (let i = 0; i < this.nodes; i++){
                 var circle = {

@@ -4,7 +4,7 @@ var _ =require('lodash')
 
 const run = async function(){
     console.log('lol')
-
+    console.log(window)
 
     if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
 
@@ -15,8 +15,8 @@ const run = async function(){
             }
 
         } ).catch( function ( error ) {
-
-            alert( JSON.stringify(error));
+            var app = new p5(sketch);
+            // alert( JSON.stringify(error));
 
         } );
 

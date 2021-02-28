@@ -31,6 +31,12 @@ const sketch = (p) => {
         p.background(0);
         pulser.update(p.mouseX, p.mouseY)
         pulser.display()
+        var acc = {
+            x: p.accelerationX,
+            y: p.accelerationY,
+            z: p.accelerationZ,
+        }
+        p.text(JSON.stringify(acc,null,2),100,100)
         // s.update(p.mouseX, p.mouseY);
         // s.display(p.mouseX, p.mouseY);
         // trail.forEach(t=>{

@@ -64,7 +64,7 @@ const sketch = (p) => {
             var targetX = s.update(x,y).x
             var targetY = s.update(x,y).y
             // let forceX = (targetX - this.x) * this.stiffness;
-
+ 
             var center = {x:p.windowWidth/2,y:p.windowHeight/2}
             let a = p.atan2(targetY - center.y, targetX - center.x);
             var rotAngle = 0

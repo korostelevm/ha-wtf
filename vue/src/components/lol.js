@@ -4,8 +4,26 @@ var _ =require('lodash')
 
 const run = async function(){
     console.log('lol')
-    var app = new p5(sketch);
-    console.log(app)
+
+
+    if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
+
+        window.DeviceOrientationEvent.requestPermission().then( function ( response ) {
+
+            if ( response == 'granted' ) {
+                var app = new p5(sketch);
+            }
+
+        } ).catch( function ( error ) {
+
+            alert( JSON.stringify(error));
+
+        } );
+
+    } else {
+        var app = new p5(sketch);
+    }
+        
 }
 
 

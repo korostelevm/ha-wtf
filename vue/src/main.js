@@ -1,9 +1,33 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './components/_globals'
-
+import VueRouter from 'vue-router'
+import Lol from './components/Lol'
+import Web from './components/Web'
 import vueCustomElement from 'vue-custom-element'
 Vue.use(vueCustomElement);
+Vue.use(VueRouter)
+
+// const Home = { template: '<div>This is Home</div>' }
+// const Foo = { template: '<div>This is Foo</div>' }
+// const Bar = { template: '<div>This is Bar {{ $route.params.id }}</div>' }
+
+const router = new VueRouter({
+  mode: 'history',
+  base: __dirname,
+  routes: [
+    // { path: '/', name: 'home', component: App },
+    { path: '/lol', name: 'foo', component: Web },
+    { path: '/', name: 'foo', component:  Lol},
+    // { path: '/bar/:id', name: 'bar', component: Bar }
+  ]
+})
+
+
+
+
+
+
 
 Vue.prototype.$api = '/api'
 
@@ -14,6 +38,7 @@ Vue.prototype.$dispatch = function(channel, o) {
 }
 
 Vue.mixin({
+  router,
   methods: {
     get_auth_header: function() {
       try{

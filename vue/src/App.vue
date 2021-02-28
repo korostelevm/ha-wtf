@@ -1,14 +1,15 @@
 <template>
 
   <div class='main'>
-    <canvas id="c"></canvas>
+    <router-view class="view">
+    </router-view>
   </div>
 
 </template>
  
 <script>
-var c = require('./canvas.js')
 var moment = require('moment')
+
 export default {
     name: 'microfrontend',
     data() {
@@ -18,7 +19,7 @@ export default {
       }
     },
     mounted: function() {
-      c.run()
+      // c.run()
       this.get_req({})
     },
     created: function() {

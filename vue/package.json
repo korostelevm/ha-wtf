@@ -14,7 +14,8 @@
     "lodash": "^4.17.15",
     "moment": "^2.27.0",
     "vue": "^2.6.11",
-    "vue-custom-element": "^3.2.12"
+    "vue-custom-element": "^3.2.12",
+    "vue-router": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

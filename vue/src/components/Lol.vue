@@ -25,6 +25,19 @@ export default {
         })
         .catch(console.error);
     } else {
+      lol.run()
+      // handle regular non iOS 13+ devices
+    }
+
+       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+             lol.run()
+          }
+        })
+        .catch(console.error);
+    } else {
       // handle regular non iOS 13+ devices
     }
 

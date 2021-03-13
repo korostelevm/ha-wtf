@@ -2,8 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import './components/_globals'
 import VueRouter from 'vue-router'
-import Lol from './components/Lol'
-import Web from './components/Web'
+import Lol from './components/Lol.vue'
+import Web from './components/Web.vue'
+import Boxes from './components/Boxes.vue'
 import vueCustomElement from 'vue-custom-element'
 Vue.use(vueCustomElement);
 Vue.use(VueRouter)
@@ -17,8 +18,9 @@ const router = new VueRouter({
   base: __dirname,
   routes: [
     // { path: '/', name: 'home', component: App },
-    { path: '/lol', name: 'foo', component: Web },
-    { path: '/', name: 'foo', component:  Lol},
+    { path: '/web', name: 'foo', component: Web },
+    { path: '/lol', name: 'foo', component:  Lol},
+    { path: '/', name: 'foo', component:  Boxes},
     // { path: '/bar/:id', name: 'bar', component: Bar }
   ]
 })

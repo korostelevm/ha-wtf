@@ -4,7 +4,7 @@
 </template>
 
 <script>
-var lol = require('./lol.js')
+var lol = require('./lol_canvas.js')
 export default {
     name: 'Lol',
     data() {

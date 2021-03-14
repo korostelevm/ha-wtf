@@ -14,148 +14,73 @@ const run = async function(){
 
 
 const sketch = (p) => {
-    let boxes = new Boxes(21);
-    let grid = new Grid(64)
-    let s;
+    let dd = []
 	p.setup = () => {
-        s = new Spring2D(0.0, 100, 2, 0);
-        if (typeof DeviceMotionEvent.requestPermission === 'function' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function'
-        ) {
-            DeviceMotionEvent.requestPermission()
-            .then(response => {
-            if (response === 'granted') {
-                window.addEventListener('devicemotion', deviceMotionHandler, true);
-            }
-            });
-
-            DeviceOrientationEvent.requestPermission()
-            .then(response => {
-            if (response === 'granted') {
-            window.addEventListener('deviceorientation', deviceTurnedHandler, true)
-            }
-        })
-        .catch(console.error)
-        }
-
 	    p.createCanvas(p.windowHeight, p.windowHeight);
         p.noStroke();
 
-        var pos_hash = window.location.hash.slice(1)
-        if(pos_hash.length%2){
-            pos_hash+='0'
-        }
-        // pos_hash = decodeURIComponent(pos_hash)
-        // pos_hash = atob(pos_hash)
-        pos_hash = _.chunk(pos_hash,2)
-        pos_hash = pos_hash.map(p=>{
-            return {
-                x: utils.convertBase(p[0],grid.size,10),
-                y: utils.convertBase(p[1],grid.size,10),
-            }
-        })
-        pos_hash.forEach(b=>{
-            boxes.add(b)
-        })
-        console.log(pos_hash)
-
-
 	};
-
+    var t = 0
+    function Box(ox, oy, x,y){
+        
+        this.tx = Math.ceil((x-50)/100)*100
+        this.ty = Math.ceil((y-50)/100)*100
+        this.ts = 100
+        this.s = new Spring2D(ox, oy, 2, 0);
+        this.ss = new Spring2D(0, 0, 2, 0);
+        this.update=(ts)=>{
+            this.ts = ts
+        }
+        this.draw = function(){
+            t+=0.1
+            // p.fill(255)
+            p.noFill()
+            p.stroke(255, 204, 0);
+            p.strokeWeight(4);
+            this.s.update(this.tx,this.ty)
+            this.ss.update(this.ts,100)
+            // p.rect(this.tx-this.ss.x/2, this.ty-this.ss.x/2, this.ss.x)
+            p.ellipse(this.tx, this.ty, this.ss.x)
+            // p.ellipse(this.tx-this.ss.x-50, this.ty-this.ss.x-50, this.ss.x)
+            // p.rect(this.s.x - 50,this.s.y-50, 100)
+            // p.rect(x,y,10)
+            // p.line(ox,oy,this.s.x,0)
+        }
+    }
 	p.draw = () => {
         p.background(0)
-        boxes.draw()
+        _.range(0,1).forEach(n=>{
+            // p.beginShape();
+            var ddd = _.clone(dd)
+            ddd.forEach(d=>{
+                // d.update(p.noise(d.tx+t+n*2)*100 + 100)
+                d.draw()
+                // p.curveVertex(d.s.x-100+d.ss.x,
+                    // d.s.y);
+                // p.curveVertex(d.s.x+d.ss.x,d.s.y);
+            })
+            // p.endShape(p.CLOSE);
+        })
 	};
 
 	p.windowResized = () => {
 		p.resizeCanvas(p.windowHeight, p.windowHeight);
 	}
-    p.mouseMoved=()=> {
-        boxes.add(grid.cell({
-            x:p.mouseX,
-            y:p.mouseY
-        }))
-      }
-    
     p.mouseClicked=()=> {
-        var base = grid.size
-        var pos = grid.cell({
-            x:p.mouseX,
-            y:p.mouseY
-        })
-        boxes.add(pos)
-        var state = boxes.boxes.map(b=>{
-            var x =  utils.convertBase(b.x.toString(),10,base)
-            var y =  utils.convertBase(b.y.toString(),10,base)
-            return `${x}${y}`
-        }).join('')
-        parent.location.hash = state
+        console.log(p.noise(p.mouseX))
+        var ox = 0, oy = 0
+        if(dd.length){
+            var prev_box = _.last(dd)
+            ox = prev_box.tx
+            oy = prev_box.ty
+        }
+        if(dd.length>10){
+            dd.shift()            
+        }
+        dd.push(new Box(ox,oy,p.mouseX, p.mouseY))
       }
 
-    function Boxes(limit){
-        this.limit = limit
-        this.boxes = []
-        this.add = function(props){
-            if(props.x <0 || props.y<0 || props.x >=grid.size || props.y>=grid.size){
-                return false
-            }
-            var new_box = new Box(props)
-            if(this.boxes.filter(b=>{
-                return _.isEqual(b.obj(), new_box.obj())
-            }).length){
-                return false
-            }
-
-            if(this.boxes.length > limit){
-                this.boxes.shift()
-            }
-            
-            this.boxes.push(new_box)
-            // p.background(0)
-            // p.beginShape();
-            // p.endShape(p.CLOSE)
-            ;
-        }
-        this.draw = function(){
-            p.stroke(255);
-            this.boxes.forEach(b=>{
-                var b = grid.px(b)
-                p.strokeWeight(5);
-                p.point(b.x, b.y);
-            })
-
-            p.noFill();
-            p.beginShape();
-            p.strokeWeight(1);
-            var b = grid.px(this.boxes[0])
-            p.curveVertex(b.x, b.y);
-            this.boxes.forEach(b=>{
-                var b = grid.px(b)
-                p.curveVertex(b.x, b.y);
-                // p.fill(255)
-                // p.rect(b.x,b.y, grid.cell_size)
-                // p.line(s.update(b.x,b.y).x,b.y, 400,400);
-                // p.vertex(pos.x,pos.y)
-            })
-            var b = grid.px(this.boxes.slice(-1)[0])
-            p.curveVertex(b.x, b.y);
-            p.endShape();
-        }
-
-
-    }
-    class Box {
-        x;
-        y;
-        constructor(pos){
-            this.x = pos.x
-            this.y = pos.y
-        }
-        obj = function(){
-            return {x:this.x,y:this.y}
-        }
-    }
-
+   
     function Spring2D(xpos, ypos, m, g) {
         this.x = xpos;// The x- and y-coordinates
         this.y = ypos;
@@ -178,32 +103,8 @@ const sketch = (p) => {
           this.y += this.vy;
           return {x:this.x,y:this.y}
         }
-      
-        // this.display = function(nx, ny) {
-        //   p.noStroke();
-        //   p.ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
-        //   p.stroke(255);
-        //   p.line(this.x, this.y, nx, ny);
-        // }
       }
 
-    function Grid(height){
-        this.cell_size = Math.floor(p.windowHeight/height)
-        this.size = height
-
-        this.px = function(props){
-            return {
-                x : Math.floor(props.x*this.cell_size),
-                y : Math.floor(props.y*this.cell_size),
-            }
-        }
-        this.cell = function(props){
-            return {
-                x : Math.floor(props.x/this.cell_size),
-                y : Math.floor(props.y/this.cell_size),
-            }
-        }
-    }
     function debug(o,y){
         p.fill(0)
         p.rect(10,y, 200,200);
